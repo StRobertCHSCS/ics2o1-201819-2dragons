@@ -8,19 +8,40 @@ SPRITE_SCALING = 0.5
 RECT_WIDTH = 150
 RECT_HEIGHT = 50
 
-center_x = 20      # Initial x position
-delta_x = -1     # change in x
+pickaxe_x = 20
+delta_angle = -5
 
+
+center_x = 100      # Initial x position
+center_y = 50       # Initial y position
+delta_x = 10       # change in x
+delta_y = 15
+# change in y
 
 def on_update(delta_time):
+    global pickaxe_x
+    global delta_angle
+
+    pickaxe_x += delta_angle
+
+    # Figure out if we hit the edge and need to reverse.
+    if pickaxe_x < -20 or pickaxe_x >40:
+        delta_angle *= -1
+
+
     global center_x, center_y
     global delta_x, delta_y
 
     center_x += delta_x
+    center_y += delta_y
 
     # Figure out if we hit the edge and need to reverse.
-    if center_x < -20 or center_x >40:
+    if center_x < -100 or center_x > WIDTH - RECT_WIDTH*2:
         delta_x *= -1
+
+    if center_y < -50 or center_y > HEIGHT - RECT_HEIGHT*4:
+        delta_y *= -1
+
 
 def on_draw():
     arcade.start_render()
@@ -38,6 +59,20 @@ def on_draw():
     draw_minecraft_images(0)
     draw_minecraft_images(300)
     draw_minecraft_images(600)
+    arcade.draw_text("REQUIRED FOR GEOGRAPHY CPT", 700, 500, arcade.color.RED, 20, font_name='GARA')
+    create_image("dirt_house.jpg", 50, 600, 200, 100)
+    arcade.draw_text("Excellent builds", 75, 575, arcade.color.WHITE, 20)
+    create_image("kancolle_1.png", 50, 400, 200, 150)
+    arcade.draw_text("Cool mods(kancolle)", 50, 375, arcade.color.WHITE, 20)
+    image = arcade.load_texture("bow.gif", mirrored=False, scale=SPRITE_SCALING)
+    arcade.draw_xywh_rectangle_textured(200, 450, 50, 50, image, 180, 255, 1, 1)
+    create_image("ore.png", 60, 510, 20, 20)
+    create_image("ore.png", 60, 490, 20, 20)
+    create_image("ore.png", 60, 470, 20, 20)
+    create_image("lag.png", 50, 250, 200, 100)
+    arcade.draw_text("Works well with slow computers", 50, 225, arcade.color.WHITE, 12)
+    create_image("dragon.png", center_x, center_y, 400, 300)
+
 
 def draw_minecraft_images(x):
     create_image("player.png", x+250, 200, 150, 200)
@@ -52,7 +87,7 @@ def create_image(texture, x, y, wid, ht):
 
 def create_pickaxe(x):
     image = arcade.load_texture("pickaxe.png", mirrored=False, scale=SPRITE_SCALING)
-    arcade.draw_xywh_rectangle_textured(x, 200, 150, 150, image, center_x, 255, 1, 1)
+    arcade.draw_xywh_rectangle_textured(x, 200, 150, 150, image, pickaxe_x, 255, 1, 1)
 
 
 def on_key_press(key, modifiers):
